@@ -5,6 +5,9 @@ from rest_framework import routers
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+from django.conf import settings
+from django.conf.urls.static import static
+
 
 from hotels.views import HotelViewSet
 from userprofile.views import UserProfileViewSet
@@ -48,4 +51,4 @@ urlpatterns = [
    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
    path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
    path('api/', include(router.urls)),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
