@@ -43,6 +43,11 @@ INSTALLED_APPS = [
     'userprofile.apps.UserprofileConfig',
     'hotels.apps.HotelsConfig',
     'rooms.apps.RoomsConfig',
+    'reviews.apps.ReviewsConfig',
+    'bookings.apps.BookingsConfig',
+    'payments.apps.PaymentsConfig',
+    'drf_yasg',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -59,6 +64,10 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
 }
 
 ROOT_URLCONF = 'core.urls'
