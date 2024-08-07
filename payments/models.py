@@ -16,7 +16,7 @@ PAYMENT_METHOD_CHOICES = (
 
 class Payment(models.Model):
     payment_id = models.CharField(max_length=20, unique=True, editable=False)
-    booking_id = models.ForeignKey('bookings.Booking', on_delete=models.CASCADE)
+    booking = models.ForeignKey('bookings.Booking', on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     payment_method = models.CharField(max_length=50, default="card", choices=PAYMENT_METHOD_CHOICES)
     payment_status = models.CharField(max_length=50, default="pending", choices=PAYMENT_STATUS_CHOICES)

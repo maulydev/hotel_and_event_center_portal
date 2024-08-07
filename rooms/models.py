@@ -1,4 +1,4 @@
-from django.db import models, transaction
+from django.db import models
 from hotels.models import Hotel
 from lib.path_and_rename import RoomImageRename
 

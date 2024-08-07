@@ -6,4 +6,4 @@ from .serializers import BookingSerializer
 class BookingViewSet(viewsets.ModelViewSet):
     queryset = Booking.objects.all()
     serializer_class = BookingSerializer
-    filterset_fields = ['booking_number','room__room_number']
+    filterset_fields = ['booking_number','room__room_number', 'room__hotel__hotel_number', 'status']
