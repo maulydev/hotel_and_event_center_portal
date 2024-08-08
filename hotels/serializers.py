@@ -13,9 +13,10 @@ class HotelSerializer(serializers.ModelSerializer):
     def get_facilities(self, obj):
         facilities_dict = {}
         facilities = Facilities.objects.filter(hotel=obj).first()
-        facilities_dict["has_wifi"] = facilities.has_wifi
-        facilities_dict["has_swimming_pool"] = facilities.has_swimming_pool
-        facilities_dict["has_conference_room"] = facilities.has_conference_room
-        facilities_dict["has_tennis_court"] = facilities.has_tennis_court
-        facilities_dict["has_breakfast_in_bed"] = facilities.has_breakfast_in_bed
+        if facilities:
+            facilities_dict["has_wifi"] = facilities.has_wifi
+            facilities_dict["has_swimming_pool"] = facilities.has_swimming_pool
+            facilities_dict["has_conference_room"] = facilities.has_conference_room
+            facilities_dict["has_tennis_court"] = facilities.has_tennis_court
+            facilities_dict["has_breakfast_in_bed"] = facilities.has_breakfast_in_bed
         return facilities_dict
