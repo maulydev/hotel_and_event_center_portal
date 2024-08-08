@@ -5,3 +5,4 @@ from .serializers import GallerySerializer
 class GalleryViewset(viewsets.ModelViewSet):
     queryset = Gallery.objects.all()
     serializer_class = GallerySerializer
+    filterset_fields = ['hotel__hotel_number']
