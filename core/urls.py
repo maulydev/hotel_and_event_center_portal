@@ -16,6 +16,9 @@ from rooms.views import RoomViewSet
 from bookings.views import BookingViewSet
 from payments.views import PaymentViewSet
 from amenities.views import AmenityViewSet
+from facilities.views import FacilitiesViewSet
+from workhours.views import WorkhoursViewSet
+from gallery.views import GalleryViewset
 
 router = routers.DefaultRouter()
 router.register(r'hotels', HotelViewSet)
@@ -25,6 +28,9 @@ router.register(r'rooms', RoomViewSet)
 router.register(r'bookings', BookingViewSet)
 router.register(r'payments', PaymentViewSet)
 router.register(r'amenities', AmenityViewSet)
+router.register(r'facilities', FacilitiesViewSet)
+router.register(r'workhours', WorkhoursViewSet)
+router.register(r'gallery', GalleryViewset)
 
 # django admin site customization
 admin.site.site_header = "Hotel Booking System"
