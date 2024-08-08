@@ -6,3 +6,4 @@ from .serializers import FacilitiesSerializers
 class FacilitiesViewSet(viewsets.ModelViewSet):
     queryset = Facilities.objects.all()
     serializer_class = FacilitiesSerializers
+    filterset_fields = ['hotel']
