@@ -10,6 +10,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-0i=2ehvuire5q9irqnyucqg0z)l3$#ls&dby@tr)*66-((d83y'
+STRIPE_SECRET_KEY = 'your_secret_key'
+STRIPE_PUBLISHABLE_KEY = 'your_publishable_key'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -63,6 +65,11 @@ REST_FRAMEWORK = {
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
 }
+
+# REST_FRAMEWORK = {
+#     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+#     'PAGE_SIZE': 2
+# }
 
 ROOT_URLCONF = 'core.urls'
 

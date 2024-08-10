@@ -23,7 +23,7 @@ from gallery.views import GalleryViewset
 router = routers.DefaultRouter()
 router.register(r'hotels', HotelViewSet)
 router.register(r'profiles', UserProfileViewSet)
-router.register(r'reviews', ReviewViewSet)
+router.register(r'reviews', ReviewViewSet, basename='reviews')
 router.register(r'rooms', RoomViewSet)
 router.register(r'bookings', BookingViewSet)
 router.register(r'payments', PaymentViewSet)
