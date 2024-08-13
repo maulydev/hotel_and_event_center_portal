@@ -6,7 +6,7 @@ room_image_rename = RoomImageRename("room_images/")
 
 class Room(models.Model):
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, related_name='rooms')
-    room_number = models.CharField(max_length=10, blank=True)
+    room_number = models.CharField(max_length=10)
     room_type = models.CharField(max_length=150)
     image = models.ImageField(upload_to=room_image_rename, blank=True)
     description = models.TextField()
