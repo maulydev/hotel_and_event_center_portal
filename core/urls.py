@@ -19,6 +19,7 @@ from amenities.views import AmenityViewSet
 from facilities.views import FacilitiesViewSet
 from workhours.views import WorkhoursViewSet
 from gallery.views import GalleryViewset
+from auth_user.views import generate_otp, verify_otp
 
 router = routers.DefaultRouter()
 router.register(r'hotels', HotelViewSet)
@@ -31,6 +32,7 @@ router.register(r'amenities', AmenityViewSet)
 router.register(r'facilities', FacilitiesViewSet)
 router.register(r'workhours', WorkhoursViewSet)
 router.register(r'gallery', GalleryViewset)
+
 
 # django admin site customization
 admin.site.site_header = "Hotel Booking System"
@@ -55,8 +57,10 @@ urlpatterns = [
    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
    path('admin/', admin.site.urls),
-   path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-   path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-   path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
+   path('api/token/generate-otp/', generate_otp, name='generate_otp'),
+   path('api/token/verify-otp/', verify_otp, name='verify_otp'),
+   # path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+   # path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+   # path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
    path('api/', include(router.urls)),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

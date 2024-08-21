@@ -2,7 +2,7 @@ from rest_framework import viewsets
 from rest_framework.filters import SearchFilter
 from .models import Hotel
 from .serializers import HotelSerializer
-from lib.pagination import Pagination
+# from lib.pagination import Pagination
 from django_filters.rest_framework import DjangoFilterBackend
 
 class HotelViewSet(viewsets.ModelViewSet):
