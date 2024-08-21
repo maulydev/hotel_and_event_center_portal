@@ -19,7 +19,7 @@ from amenities.views import AmenityViewSet
 from facilities.views import FacilitiesViewSet
 from workhours.views import WorkhoursViewSet
 from gallery.views import GalleryViewset
-from auth_user.views import generate_otp, verify_otp
+from auth_user.views import generate_otp, verify_otp, register
 
 router = routers.DefaultRouter()
 router.register(r'hotels', HotelViewSet)
@@ -59,7 +59,8 @@ urlpatterns = [
    path('admin/', admin.site.urls),
    path('api/token/generate-otp/', generate_otp, name='generate_otp'),
    path('api/token/verify-otp/', verify_otp, name='verify_otp'),
-   # path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+   path('api/token/register/', register, name='register'),
+   # path('api/`token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
    # path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
    # path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
    path('api/', include(router.urls)),
