@@ -7,6 +7,7 @@ from datetime import timedelta
 from django.utils import timezone
 import requests
 from .models import User, OtpHistory
+from userprofile.models import UserProfile
 
 
 def send_otp_sms(phone_number, otp):
@@ -22,12 +23,12 @@ def send_otp_sms(phone_number, otp):
 
 @api_view(['POST'])
 def generate_otp(request):
-    username = request.data.get('phone_number')
+    phone_number = request.data.get('phone_number')
     
-    if not username:
+    if not phone_number:
         return Response({'error': 'Phone number not provided'}, status=status.HTTP_400_BAD_REQUEST)
 
-    user = User.objects.filter(username=username).first()
+    user = User.objects.filter(profile__phone_number=phone_number).first()
     
     if user:
         # Generate a 6-digit numeric OTP
@@ -35,7 +36,7 @@ def generate_otp(request):
         
         # Create or update OTP history
         otp_history, created = OtpHistory.objects.update_or_create(
-            user=user,
+            phone_number=phone_number,
             defaults={
                 'otp': otp,
                 'expires_at': timezone.now() + timedelta(minutes=10)
@@ -50,69 +51,64 @@ def generate_otp(request):
         return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
 
 
-
-# @api_view(['POST'])
-# def verify_otp(request):
-#     username = request.data.get('phone_number')
-#     otp = request.data.get('otp')
-    
-#     if not username or not otp:
-#         return Response({'error': 'Phone number and OTP must be provided'}, status=status.HTTP_400_BAD_REQUEST)
-    
-#     user = User.objects.filter(username=username).first()
-    
-#     if not user:
-#         return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
-    
-#     otp_history = OtpHistory.objects.filter(user=user, otp=otp).first()
-    
-#     if not otp_history:
-#         return Response({'error': 'Invalid OTP'}, status=status.HTTP_400_BAD_REQUEST)
-    
-#     if otp_history.expires_at < timezone.now():
-#         return Response({'error': 'OTP expired'}, status=status.HTTP_400_BAD_REQUEST)
-    
-#     # If OTP is valid and not expired, authenticate the user
-#     # Generate JWT tokens
-#     refresh = RefreshToken.for_user(user)
-    
-#     # Optionally, you can delete the OTP history after successful verification
-#     otp_history.delete()
-    
-#     return Response({
-#         'refresh': str(refresh),
-#         'access': str(refresh.access_token),
-#     }, status=status.HTTP_200_OK)
-
 @api_view(['POST'])
 def register(request):
     phone_number = request.data.get('phone_number')
+    username = request.data.get('username')
+    otp = request.data.get('otp')
     default_password = "Password@Default"
 
     if not phone_number:
-        return Response({'error': 'Phone number required'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'error': 'Phone number is required'}, status=status.HTTP_400_BAD_REQUEST)
 
-    if User.objects.filter(username=phone_number).exists():
-        return Response({'error': 'User with this phone number already exists'}, status=status.HTTP_400_BAD_REQUEST)
+    # Scenario 1: If only the phone number is provided, generate and send OTP
+    if phone_number and not username and not otp:
+        user_exists = User.objects.filter(profile__phone_number=phone_number).exists()
 
-    # Create the user
-    user = User.objects.create_user(username=phone_number, password=default_password)
-    
-    # Generate OTP
-    otp = generate_numeric_otp(6)
-    
-    # Save OTP history
-    OtpHistory.objects.create(
-        user=user,
-        otp=otp,
-        expires_at=timezone.now() + timedelta(minutes=10)
-    )
-    
-    # Optionally send OTP via SMS here
-    # send_otp_sms(phone_number, otp)
-    print("Verification code:", otp)
-    
-    return Response({'message': 'User registered successfully, please verify OTP', 'otp': otp}, status=status.HTTP_201_CREATED)
+        if user_exists:
+            return Response({'error': 'User with this phone number already exists'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Generate OTP
+        generated_otp = generate_numeric_otp(6)
+
+        # Save OTP history
+        OtpHistory.objects.create(
+            phone_number=phone_number,
+            otp=generated_otp,
+            expires_at=timezone.now() + timedelta(minutes=10)
+        )
+        
+        # Optionally send OTP via SMS here
+        # send_otp_sms(phone_number, generated_otp)
+        print("Verification code:", generated_otp)
+        
+        return Response({'message': 'OTP generated and sent successfully', 'otp': generated_otp}, status=status.HTTP_200_OK)
+
+    # Scenario 2: If phone number, username, and OTP are provided, register the user
+    if phone_number and username and otp:
+        # Verify if the OTP is correct
+        otp_history = OtpHistory.objects.filter(phone_number=phone_number, otp=otp).first()
+
+        if not otp_history or timezone.now() > otp_history.expires_at:
+            return Response({'error': 'Invalid or expired OTP'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Check if the user already exists
+        if User.objects.filter(profile__phone_number=phone_number).exists():
+            return Response({'error': 'User with this phone number already exists'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Create the user
+        user = User.objects.create_user(username=username, password=default_password)
+        
+        # Create the UserProfile instance
+        profile = UserProfile.objects.create(user=user, phone_number=phone_number)
+
+        # Optionally delete the used OTP history
+        otp_history.delete()
+
+        return Response({'message': 'User registered successfully'}, status=status.HTTP_201_CREATED)
+
+    return Response({'error': 'Incomplete data. Please provide the phone number, username, and OTP to register, or just the phone number to generate an OTP.'}, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 @api_view(['POST'])
@@ -123,12 +119,12 @@ def verify_otp(request):
     if not phone_number or not otp:
         return Response({'error': 'Phone number and OTP must be provided'}, status=status.HTTP_400_BAD_REQUEST)
 
-    user = User.objects.filter(username=phone_number).first()
+    user = User.objects.filter(profile__phone_number=phone_number).first()
 
     if not user:
         return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
 
-    otp_history = OtpHistory.objects.filter(user=user, otp=otp).first()
+    otp_history = OtpHistory.objects.filter(phone_number=phone_number, otp=otp).first()
 
     if not otp_history:
         return Response({'error': 'Invalid OTP'}, status=status.HTTP_400_BAD_REQUEST)

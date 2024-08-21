@@ -4,7 +4,7 @@ from datetime import timedelta
 from django.contrib.auth.models import User
 
 class OtpHistory(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    phone_number = models.CharField(max_length=20, blank=True)
     otp = models.CharField(max_length=6)
     created_at = models.DateTimeField(auto_now_add=True)
     expires_at = models.DateTimeField(blank=True, null=True)
