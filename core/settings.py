@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'django_filters',
     'auth_user.apps.AuthUserConfig',
+    'event_centers.apps.EventCentersConfig',
 ]
 
 MIDDLEWARE = [

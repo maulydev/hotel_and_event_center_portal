@@ -1,28 +1,6 @@
 from django.db import models, transaction
 from lib.path_and_rename import HotelImageRename
-
-REGION_CHOICES = (
-    ('AH', 'Ashanti'),
-    ('BA', 'Bono'),
-    ('BE', 'Bono East'),
-    ('AHA', 'Ahafo'),
-    ('CP', 'Central'),
-    ('EP', 'Eastern'),
-    ('GP', 'Greater Accra'),
-    ('NE', 'North East'),
-    ('NP', 'Northern'),
-    ('OT', 'Oti'),
-    ('SV', 'Savannah'),
-    ('UE', 'Upper East'),
-    ('UW', 'Upper West'),
-    ('VR', 'Volta'),
-    ('WR', 'Western'),
-    ('WN', 'Western North')
-)
-
-COUNTRY_CHOICES = (
-    ('GH', 'Ghana'),
-)
+from lib.constants import COUNTRY_CHOICES, REGION_CHOICES
 
 hotel_image_rename = HotelImageRename("hotel_images/")
 

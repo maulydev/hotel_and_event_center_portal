@@ -48,3 +48,21 @@ class ProfileImageRename:
             os.unlink(filepath)
         # Return the whole path to the file
         return os.path.join(self.path, filename)
+
+    
+
+@deconstructible
+class EventCenterImageRename:
+    def __init__(self, sub_path):
+        self.path = sub_path
+
+    def __call__(self, instance, filename):
+        ext = filename.split('.')[-1]
+        # Rename the file to the event center number
+        filename = f'{instance.event_center_number}.{ext}'
+        filepath = f"media/event_center_images/{filename}"
+        if os.path.exists(filepath):
+            os.unlink(filepath)
+        # Return the whole path to the file
+        return os.path.join(self.path, filename)
+

@@ -12,6 +12,11 @@ class Booking(models.Model):
     status = models.CharField(max_length=50, default="pending", choices=[('pending', 'Pending'), ('confirmed', 'Confirmed'), ('cancelled', 'Cancelled')])
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = "Hotel Booking"
+        verbose_name_plural = "Hotel Bookings"
 
     def clean(self):
         # Check for overlapping bookings

@@ -1,13 +1,11 @@
 from django.contrib import admin
 from django.urls import path, include, re_path
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
 from rest_framework import routers
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from django.conf import settings
 from django.conf.urls.static import static
-
 
 from hotels.views import HotelViewSet
 from userprofile.views import UserProfileViewSet
@@ -20,6 +18,7 @@ from facilities.views import FacilitiesViewSet
 from workhours.views import WorkhoursViewSet
 from gallery.views import GalleryViewset
 from auth_user.views import generate_otp, verify_otp, register
+from event_centers.views import EventCenterViewSet, EventBookingViewSet
 
 router = routers.DefaultRouter()
 router.register(r'hotels', HotelViewSet)
@@ -32,6 +31,8 @@ router.register(r'amenities', AmenityViewSet)
 router.register(r'facilities', FacilitiesViewSet)
 router.register(r'workhours', WorkhoursViewSet)
 router.register(r'gallery', GalleryViewset)
+router.register(r'event-centers', EventCenterViewSet)
+router.register(r'event-bookings', EventBookingViewSet)
 
 
 # django admin site customization
@@ -60,8 +61,5 @@ urlpatterns = [
    path('api/token/generate-otp/', generate_otp, name='generate_otp'),
    path('api/token/verify-otp/', verify_otp, name='verify_otp'),
    path('api/token/register/', register, name='register'),
-   # path('api/`token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-   # path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-   # path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
    path('api/', include(router.urls)),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
