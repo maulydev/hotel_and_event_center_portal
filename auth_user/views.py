@@ -12,7 +12,43 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
 
-
+@swagger_auto_schema(
+    method='post',
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            'phone_number': openapi.Schema(type=openapi.TYPE_STRING, description='Phone number of the user'),
+        },
+        required=['phone_number'],
+    ),
+    responses={
+        200: openapi.Response(
+            description='OTP generated and sent successfully',
+            examples={
+                'application/json': {
+                    'code': '200',
+                    'message': 'OTP sent successfully'
+                }
+            }
+        ),
+        400: openapi.Response(
+            description='Bad request',
+            examples={
+                'application/json': {
+                    'error': 'Phone number not provided'
+                }
+            }
+        ),
+        404: openapi.Response(
+            description='User not found',
+            examples={
+                'application/json': {
+                    'error': 'User not found'
+                }
+            }
+        ),
+    }
+)
 @api_view(['POST'])
 def generate_otp(request):
     phone_number = request.data.get('phone_number')
@@ -116,7 +152,44 @@ def register(request):
     return Response({'error': 'Incomplete data. Please provide the phone number, username, and OTP to register, or just the phone number to generate an OTP.'}, status=status.HTTP_400_BAD_REQUEST)
 
 
-
+@swagger_auto_schema(
+    method='post',
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            'phone_number': openapi.Schema(type=openapi.TYPE_STRING, description='Phone number of the user'),
+            'otp': openapi.Schema(type=openapi.TYPE_STRING, description='One-time password (OTP) sent to the user'),
+        },
+        required=['phone_number', 'otp'],
+    ),
+    responses={
+        200: openapi.Response(
+            description='OTP verified successfully',
+            examples={
+                'application/json': {
+                    'refresh': 'your_refresh_token_here',
+                    'access': 'your_access_token_here',
+                }
+            }
+        ),
+        400: openapi.Response(
+            description='Bad request',
+            examples={
+                'application/json': {
+                    'error': 'Phone number and OTP must be provided'
+                }
+            }
+        ),
+        404: openapi.Response(
+            description='User not found',
+            examples={
+                'application/json': {
+                    'error': 'User not found'
+                }
+            }
+        ),
+    }
+)
 @api_view(['POST'])
 def verify_otp(request):
     phone_number = request.data.get('phone_number')
