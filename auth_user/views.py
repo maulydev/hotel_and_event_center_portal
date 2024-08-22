@@ -5,21 +5,13 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from random_otp.generator import generate_numeric_otp
 from datetime import timedelta
 from django.utils import timezone
-import requests
 from .models import User, OtpHistory
 from userprofile.models import UserProfile
+from lib.otp import send_otp_sms
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 
 
-def send_otp_sms(phone_number, otp):
-    # url = 'https://api.msg91.com/api/sendhttp.php'
-    api_key = ''
-    sender_id = 'ercodr(TM)'
-    message = f'Your Verfication code is: {otp}'
-    recipient = phone_number
-    url = f'https://sms.arkesel.com/sms/api?action=send-sms&api_key={api_key}&to={recipient}&from={sender_id}&sms={message}'
-    response = requests.get(url)
-    return response
-    
 
 @api_view(['POST'])
 def generate_otp(request):
@@ -44,13 +36,29 @@ def generate_otp(request):
         )
         
         # Optionally send OTP via SMS here using Arkesel SMS API
-        # send_otp_sms(username, otp)
-        print("Verification code:", otp)
-        return Response({'otp': otp}, status=status.HTTP_200_OK)
+        response = send_otp_sms(phone_number, otp)
+        return Response({'code': response['code'], 'message': response['message']}, status=status.HTTP_200_OK)
     else:
         return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
 
 
+@swagger_auto_schema(
+    method='post',
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            'phone_number': openapi.Schema(type=openapi.TYPE_STRING, description='Phone number of the user'),
+            'username': openapi.Schema(type=openapi.TYPE_STRING, description='Username for the account', nullable=True),
+            'otp': openapi.Schema(type=openapi.TYPE_STRING, description='OTP for verification', nullable=True),
+        },
+        required=['phone_number'],  # Specify that phone_number is required
+    ),
+    responses={
+        201: openapi.Response('User registered successfully'),
+        400: openapi.Response('Bad request'),
+        404: openapi.Response('User not found'),
+    }
+)
 @api_view(['POST'])
 def register(request):
     phone_number = request.data.get('phone_number')
@@ -79,10 +87,8 @@ def register(request):
         )
         
         # Optionally send OTP via SMS here
-        # send_otp_sms(phone_number, generated_otp)
-        print("Verification code:", generated_otp)
-        
-        return Response({'message': 'OTP generated and sent successfully', 'otp': generated_otp}, status=status.HTTP_200_OK)
+        response = send_otp_sms(phone_number, generated_otp)
+        return Response({'code': response['code'], 'message': response['message']}, status=status.HTTP_200_OK)
 
     # Scenario 2: If phone number, username, and OTP are provided, register the user
     if phone_number and username and otp:
