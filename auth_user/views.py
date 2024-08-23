@@ -230,5 +230,6 @@ def verify_otp(request):
         'username': user.username,
         'phone_number': user.profile.phone_number,
         'role': user.profile.role,
-        'profile_picture': profile_picture_url
+        'profile_picture': profile_picture_url,
+        'login_time': timezone.now()
     }, status=status.HTTP_200_OK)
