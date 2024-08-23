@@ -2,9 +2,6 @@ import os
 import requests
 from dotenv import load_dotenv
 
-# project_folder = os.path.expanduser('~/hotel_and_event_center_portal')  # adjust as appropriate
-# load_dotenv(os.path.join(project_folder, '.env'))
-
 load_dotenv()
 
 API_KEY = os.getenv('API_KEY')
