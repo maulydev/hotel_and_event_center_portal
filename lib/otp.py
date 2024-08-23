@@ -2,7 +2,7 @@ import requests
 
 def send_otp_sms(phone_number, otp):
     # url = 'https://api.msg91.com/api/sendhttp.php'
-    api_key = 'VUJnZXF5ZnRnV1pOZHdGeVRibmU'
+    api_key = ''
     sender_id = 'ercodr(TM)'
     message = f'Your Verfication code is: {otp}'
     recipient = phone_number
