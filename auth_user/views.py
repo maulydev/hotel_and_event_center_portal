@@ -216,8 +216,19 @@ def verify_otp(request):
     user.save()
 
     # Optionally, generate a JWT token for the user
-    refresh = RefreshToken.for_user(user)
+    # refresh = RefreshToken.for_user(user)
+    # return Response({
+    #     'refresh': str(refresh),
+    #     'access': str(refresh.access_token),
+    # }, status=status.HTTP_200_OK)
+    profile_picture_url = None
+    if user.profile.profile_picture and user.profile.profile_picture.name:
+        profile_picture_url = user.profile.profile_picture.url
+
     return Response({
-        'refresh': str(refresh),
-        'access': str(refresh.access_token),
+        'user_id': user.id,
+        'username': user.username,
+        'phone_number': user.profile.phone_number,
+        'role': user.profile.role,
+        'profile_picture': profile_picture_url
     }, status=status.HTTP_200_OK)
