@@ -19,13 +19,16 @@ class Booking(models.Model):
         verbose_name_plural = "Hotel Bookings"
 
     def clean(self):
-        # Check for overlapping bookings
-        if Booking.objects.filter(
+        # Exclude the current booking from the overlap check when updating
+        overlapping_bookings = Booking.objects.filter(
             room=self.room,
             checkin__lt=self.checkout,
             checkout__gt=self.checkin
-        ).exists():
+        ).exclude(id=self.id)
+
+        if overlapping_bookings.exists():
             raise ValidationError("This room is already booked for the selected period.")
+
 
     def save(self, *args, **kwargs):
         self.clean()  # Ensure that the booking is valid before saving

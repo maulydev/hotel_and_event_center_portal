@@ -1,7 +1,6 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework_simplejwt.tokens import RefreshToken
 from random_otp.generator import generate_numeric_otp
 from datetime import timedelta
 from django.utils import timezone
