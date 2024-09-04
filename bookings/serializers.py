@@ -15,7 +15,7 @@ class BookingSerializer(serializers.ModelSerializer):
 class BookingCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Booking
-        fields = '__all__'
+        fields = ('id', 'total_cost', 'checkin', 'checkout', 'room', 'user')
 
     def validate(self, data):
         checkin = data.get('checkin')

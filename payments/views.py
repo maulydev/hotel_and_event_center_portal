@@ -1,12 +1,12 @@
 from rest_framework import viewsets
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
+# from rest_framework.views import APIView
+# from rest_framework.response import Response
+# from rest_framework import status
 from .models import Payment
 from .serializers import PaymentSerializer
-from .serializers import CardInformationSerializer
+# from .serializers import CardInformationSerializer
 
-import stripe
+# import stripe
 
 
 class PaymentViewSet(viewsets.ModelViewSet):
