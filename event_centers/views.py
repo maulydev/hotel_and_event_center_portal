@@ -7,6 +7,7 @@ from .serializers import EventCenterSerializer, EventBookingSerializer
 class EventCenterViewSet(viewsets.ModelViewSet):
     queryset = EventCenter.objects.all()
     serializer_class = EventCenterSerializer
+    lookup_field = 'event_center_number'
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_fields = ['name', 'region', 'city', 'country']
     search_fields = ['name', 'region', 'city', 'country']
