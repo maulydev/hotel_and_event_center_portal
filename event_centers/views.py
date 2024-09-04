@@ -2,7 +2,7 @@ from rest_framework import viewsets
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter
 from .models import EventCenter, EventBooking
-from .serializers import EventCenterSerializer, EventBookingSerializer
+from .serializers import EventCenterSerializer, EventBookingSerializer, EventBookingCreateSerializer
 
 class EventCenterViewSet(viewsets.ModelViewSet):
     queryset = EventCenter.objects.all()
@@ -18,12 +18,11 @@ class EventCenterViewSet(viewsets.ModelViewSet):
 
 class EventBookingViewSet(viewsets.ModelViewSet):
     queryset = EventBooking.objects.all()
-    serializer_class = EventBookingSerializer
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['event_center', 'customer', 'start_date', 'end_date']
+    filterset_fields = ['booking_number', 'event_center__event_center_number', 'status']
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    search_fields = ['booking_number', 'event_center__name']
 
-    def get_queryset(self):
-        return EventBooking.objects.all()
-
-    def perform_create(self, serializer):
-        serializer.save(customer=self.request.user.profile)  # Assuming the user has a profile
+    def get_serializer_class(self):
+        if self.request.method in ['POST', 'PUT', 'PATCH']:
+            return EventBookingCreateSerializer
+        return EventBookingSerializer

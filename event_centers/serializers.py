@@ -45,3 +45,43 @@ class EventBookingSerializer(serializers.ModelSerializer):
     class Meta:
         model = EventBooking
         fields = '__all__'  # Or specify the fields explicitly if you want to exclude/include specific fields
+
+
+class EventBookingCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EventBooking
+        fields = ('id', 'total_price', 'start_date', 'end_date', 'event_center', 'customer')
+
+    def validate(self, data):
+        start_date = data.get('start_date')
+        end_date = data.get('end_date')
+        event_center = data.get('event_center')
+        
+        if start_date >= end_date:
+            raise serializers.ValidationError("The end date must be after the start date.")
+
+        # Check for overlapping bookings
+        overlapping_bookings = EventBooking.objects.filter(
+            event_center=event_center,
+            start_date__lt=end_date,
+            end_date__gt=start_date
+        )
+
+        if overlapping_bookings.exists():
+            raise serializers.ValidationError("This event center is already booked for the selected period.")
+        
+        return data
+
+    def create(self, validated_data):
+        # Calculate total price based on event center's price per hour and booking duration
+        event_center = validated_data['event_center']
+        start_date = validated_data['start_date']
+        end_date = validated_data['end_date']
+        
+        duration = end_date - start_date
+        hours = duration.total_seconds() / 3600
+        total_price = event_center.price_per_hour * hours
+        
+        validated_data['total_price'] = total_price
+        
+        return super().create(validated_data)
