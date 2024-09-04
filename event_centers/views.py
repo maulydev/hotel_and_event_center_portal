@@ -35,5 +35,5 @@ class EventBookingViewSet(viewsets.ModelViewSet):
             
             from lib.otp import send_otp_sms
             
-            message = f'Your event booking is confirmed. Your booking code is: {booking_code}'
+            message = f'Your Event Center booking is sucessful. Your booking code is: {booking_code}'
             send_otp_sms(user_phone, message)
