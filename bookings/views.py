@@ -11,17 +11,3 @@ class BookingViewSet(viewsets.ModelViewSet):
         if self.request.method in ['POST', 'PUT', 'PATCH']:
             return BookingCreateSerializer
         return BookingSerializer
-
-    def perform_create(self, serializer):
-        booking = serializer.save()
-        if booking:
-            # Assuming the booking code is the booking_number
-            booking_code = booking.booking_number
-            user_phone = booking.user.phone_number  # Assuming user has a phone_number field
-            
-            # Import the send_otp_sms function
-            from lib.otp import send_sms
-            
-            # Send the booking code to the user
-            message = f'Your booking is successful. Your booking code is: {booking_code}'
-            send_sms(user_phone, message)
