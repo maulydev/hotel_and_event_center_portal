@@ -14,7 +14,7 @@ from rooms.views import RoomViewSet
 from bookings.views import BookingViewSet
 from payments.views import PaymentViewSet
 from amenities.views import AmenityViewSet
-from facilities.views import FacilitiesViewSet
+from facilities.views import FacilitiesViewSet, EventCenterFacilitiesViewSet
 from workhours.views import WorkhoursViewSet
 from workhours.views import EventCenterWorkhoursViewSet
 from gallery.views import GalleryViewset
@@ -32,6 +32,7 @@ router.register(r'bookings', BookingViewSet)
 router.register(r'payments', PaymentViewSet)
 router.register(r'amenities', AmenityViewSet)
 router.register(r'facilities', FacilitiesViewSet)
+router.register(r'event-center-facilities', EventCenterFacilitiesViewSet)
 router.register(r'workhours', WorkhoursViewSet)
 router.register(r'event-center-workhours', EventCenterWorkhoursViewSet)
 router.register(r'gallery', GalleryViewset)
