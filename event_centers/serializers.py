@@ -13,6 +13,7 @@ class EventCenterSerializer(serializers.ModelSerializer):
     owner = UserProfileSerializer(read_only=True)
     facilities = serializers.SerializerMethodField(read_only=True)
     avg_ratings = serializers.SerializerMethodField(read_only=True)
+    booking_list = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = EventCenter
@@ -40,6 +41,10 @@ class EventCenterSerializer(serializers.ModelSerializer):
             average_service_rating=Avg('service_rating')
         )
         return avg_ratings if any(avg_ratings.values()) else {}
+    
+    def get_booking_list(self, obj):
+        bookings = EventBooking.objects.filter(event_center=obj)
+        return EventBookingSerializer(bookings, many=True).data
 
 
 
