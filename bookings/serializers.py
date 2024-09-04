@@ -13,9 +13,11 @@ class BookingSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class BookingCreateSerializer(serializers.ModelSerializer):
+    booking_number = serializers.CharField(read_only=True)
+
     class Meta:
         model = Booking
-        fields = ('checkin', 'checkout', 'user', 'room')
+        fields = ('checkin', 'checkout', 'user', 'room', 'booking_number')
 
     def validate(self, data):
         checkin = data.get('checkin')
@@ -33,3 +35,8 @@ class BookingCreateSerializer(serializers.ModelSerializer):
             raise ValidationError(_("This room is already booked for the selected period."))
 
         return data
+
+    def create(self, validated_data):
+        booking = Booking.objects.create(**validated_data)
+        booking.save()  # This will trigger the save method in the model, generating the booking_number
+        return booking

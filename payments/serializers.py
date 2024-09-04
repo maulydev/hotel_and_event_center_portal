@@ -4,7 +4,7 @@ from bookings.serializers import BookingSerializer
 import datetime
 
 class PaymentSerializer(serializers.ModelSerializer):
-    booking = BookingSerializer(read_only=True)
+    # booking = BookingSerializer(read_only=True)
     class Meta:
         model = Payment
         fields = '__all__'
