@@ -1,13 +1,16 @@
 from rest_framework import viewsets
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import SearchFilter
 from .models import EventCenter, EventBooking
 from .serializers import EventCenterSerializer, EventBookingSerializer
 
 class EventCenterViewSet(viewsets.ModelViewSet):
     queryset = EventCenter.objects.all()
     serializer_class = EventCenterSerializer
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_fields = ['name', 'region', 'city', 'country']
+    search_fields = ['name', 'region', 'city', 'country']
+    
 
     def get_queryset(self):
         return EventCenter.objects.all()
