@@ -12,7 +12,7 @@ from userprofile.views import UserProfileViewSet
 from reviews.views import ReviewViewSet, EventCenterReviewViewSet
 from rooms.views import RoomViewSet
 from bookings.views import BookingViewSet
-from payments.views import PaymentViewSet
+from payments.views import PaymentViewSet, EventCenterPaymentViewSet
 from amenities.views import AmenityViewSet
 from facilities.views import FacilitiesViewSet, EventCenterFacilitiesViewSet
 from workhours.views import WorkhoursViewSet
@@ -30,6 +30,7 @@ router.register(r'event-center-reviews', EventCenterReviewViewSet, basename='eve
 router.register(r'rooms', RoomViewSet)
 router.register(r'bookings', BookingViewSet)
 router.register(r'payments', PaymentViewSet)
+router.register(r'event-center-payments', EventCenterPaymentViewSet)
 router.register(r'amenities', AmenityViewSet)
 router.register(r'facilities', FacilitiesViewSet)
 router.register(r'event-center-facilities', EventCenterFacilitiesViewSet)
