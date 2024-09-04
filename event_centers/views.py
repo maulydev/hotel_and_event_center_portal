@@ -26,3 +26,14 @@ class EventBookingViewSet(viewsets.ModelViewSet):
         if self.request.method in ['POST', 'PUT', 'PATCH']:
             return EventBookingCreateSerializer
         return EventBookingSerializer
+
+    def perform_create(self, serializer):
+        booking = serializer.save()
+        if booking:
+            booking_code = booking.booking_number
+            user_phone = booking.customer.phone_number  # Assuming customer has a phone_number field
+            
+            from lib.otp import send_otp_sms
+            
+            message = f'Your event booking is confirmed. Your booking code is: {booking_code}'
+            send_otp_sms(user_phone, message)
