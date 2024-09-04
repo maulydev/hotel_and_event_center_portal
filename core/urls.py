@@ -9,7 +9,7 @@ from django.conf.urls.static import static
 
 from hotels.views import HotelViewSet
 from userprofile.views import UserProfileViewSet
-from reviews.views import ReviewViewSet
+from reviews.views import ReviewViewSet, EventCenterReviewViewSet
 from rooms.views import RoomViewSet
 from bookings.views import BookingViewSet
 from payments.views import PaymentViewSet
@@ -26,6 +26,7 @@ router = routers.DefaultRouter()
 router.register(r'hotels', HotelViewSet)
 router.register(r'profiles', UserProfileViewSet)
 router.register(r'reviews', ReviewViewSet, basename='reviews')
+router.register(r'event-center-reviews', EventCenterReviewViewSet, basename='event-center-reviews')
 router.register(r'rooms', RoomViewSet)
 router.register(r'bookings', BookingViewSet)
 router.register(r'payments', PaymentViewSet)
