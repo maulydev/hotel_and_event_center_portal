@@ -16,6 +16,7 @@ from payments.views import PaymentViewSet
 from amenities.views import AmenityViewSet
 from facilities.views import FacilitiesViewSet
 from workhours.views import WorkhoursViewSet
+from workhours.views import EventCenterWorkhoursViewSet
 from gallery.views import GalleryViewset
 from gallery.views import EventCenterGalleryViewset
 from auth_user.views import generate_otp, verify_otp, register
@@ -31,6 +32,7 @@ router.register(r'payments', PaymentViewSet)
 router.register(r'amenities', AmenityViewSet)
 router.register(r'facilities', FacilitiesViewSet)
 router.register(r'workhours', WorkhoursViewSet)
+router.register(r'event-center-workhours', EventCenterWorkhoursViewSet)
 router.register(r'gallery', GalleryViewset)
 router.register(r'event-center-gallery', EventCenterGalleryViewset)
 router.register(r'event-centers', EventCenterViewSet)
