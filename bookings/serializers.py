@@ -13,17 +13,15 @@ class BookingSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class BookingCreateSerializer(serializers.ModelSerializer):
-    booking_number = serializers.CharField(read_only=True)
-
     class Meta:
         model = Booking
-        fields = ('checkin', 'checkout', 'user', 'room', 'booking_number')
+        fields = '__all__'
 
     def validate(self, data):
         checkin = data.get('checkin')
         checkout = data.get('checkout')
         room = data.get('room')
-
+        
         # Check for overlapping bookings
         overlapping_bookings = Booking.objects.filter(
             room=room,
@@ -33,10 +31,5 @@ class BookingCreateSerializer(serializers.ModelSerializer):
 
         if overlapping_bookings.exists():
             raise ValidationError(_("This room is already booked for the selected period."))
-
+        
         return data
-
-    def create(self, validated_data):
-        booking = Booking.objects.create(**validated_data)
-        booking.save()  # This will trigger the save method in the model, generating the booking_number
-        return booking
