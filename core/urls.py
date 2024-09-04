@@ -17,6 +17,7 @@ from amenities.views import AmenityViewSet
 from facilities.views import FacilitiesViewSet
 from workhours.views import WorkhoursViewSet
 from gallery.views import GalleryViewset
+from gallery.views import EventCenterGalleryViewset
 from auth_user.views import generate_otp, verify_otp, register
 from event_centers.views import EventCenterViewSet, EventBookingViewSet
 
@@ -31,6 +32,7 @@ router.register(r'amenities', AmenityViewSet)
 router.register(r'facilities', FacilitiesViewSet)
 router.register(r'workhours', WorkhoursViewSet)
 router.register(r'gallery', GalleryViewset)
+router.register(r'event-center-gallery', EventCenterGalleryViewset)
 router.register(r'event-centers', EventCenterViewSet)
 router.register(r'event-bookings', EventBookingViewSet)
 
