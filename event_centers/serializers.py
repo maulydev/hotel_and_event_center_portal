@@ -5,6 +5,8 @@ from userprofile.serializers import UserProfileSerializer
 from facilities.models import EventCenterFacilities
 from reviews.models import EventCenterReview
 from django.db.models import Avg
+from decimal import Decimal
+
 
 
 class EventCenterSerializer(serializers.ModelSerializer):
@@ -80,7 +82,7 @@ class EventBookingCreateSerializer(serializers.ModelSerializer):
         
         duration = end_date - start_date
         hours = duration.total_seconds() / 3600
-        total_price = event_center.price_per_hour * hours
+        total_price = event_center.price_per_hour * Decimal(hours)
         
         validated_data['total_price'] = total_price
         
