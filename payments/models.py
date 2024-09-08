@@ -52,7 +52,7 @@ class EventCenterPayment(models.Model):
     event_center_booking = models.ForeignKey('event_centers.EventBooking', on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     payment_method = models.CharField(max_length=50, default="card", choices=PAYMENT_METHOD_CHOICES)
-    payment_status = models.CharField(max_length=50, default="pending", choices=PAYMENT_STATUS_CHOICES)
+    payment_status = models.CharField(max_length=50, default="confirmed", choices=PAYMENT_STATUS_CHOICES)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
