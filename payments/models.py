@@ -27,6 +27,10 @@ class Payment(models.Model):
         if not self.payment_id:
             self.payment_id = self.generate_payment_id()
         super().save(*args, **kwargs)
+        
+        if self.payment_status == 'confirmed':
+            self.booking.status = 'confirmed'
+            self.booking.save()
 
     def generate_payment_id(self):
         # Generate a unique ID based on UUID and current timestamp
@@ -60,6 +64,11 @@ class EventCenterPayment(models.Model):
         if not self.payment_id:
             self.payment_id = self.generate_payment_id()
         super().save(*args, **kwargs)
+        
+        if self.payment_status == 'confirmed':
+            self.event_center_booking.status = 'confirmed'
+            self.event_center_booking.save()
+
 
     def generate_payment_id(self):
         # Generate a unique ID based on UUID and current timestamp
