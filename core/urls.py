@@ -67,8 +67,8 @@ urlpatterns = [
    path('admin/', admin.site.urls),
    # path('api/token/generate-otp/', generate_otp, name='generate_otp'),
    # path('api/token/verify-otp/', verify_otp, name='verify_otp'),
-   path('api/auth/register/', register, name='register'),
-   path('api/auth/generate-otp/', generate_otp, name='generate_otp'),
-   path('api/auth/verify-otp/', verify_otp, name='verify_otp'),
+   path('api/token/register/', register, name='register'),
+   path('api/token/generate-otp/', generate_otp, name='generate_otp'),
+   path('api/token/verify-otp/', verify_otp, name='verify_otp'),
    path('api/', include(router.urls)),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
