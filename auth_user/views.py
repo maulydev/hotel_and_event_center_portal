@@ -316,7 +316,15 @@ def verify_otp(request):
         otp_history.delete()
         
         user_serializer = UserSerializer(user)
-        return Response(user_serializer.data, status=status.HTTP_200_OK)
+        response = {
+            'user_id': user.id,
+            'username': user.username,
+            'phone_number': user.profile.phone_number,
+            'role': user.profile.role,
+            'profile_picture': user.profile.profile_picture.url if user.profile.profile_picture else None,
+            'login_time': timezone.now()
+        }
+        return Response(response, status=status.HTTP_200_OK)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
