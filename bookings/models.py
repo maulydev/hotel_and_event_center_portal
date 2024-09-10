@@ -1,10 +1,10 @@
 import uuid
 from django.db import models
 from django.core.exceptions import ValidationError
-
+from django.contrib.auth.models import User
 class Booking(models.Model):
     booking_number = models.CharField(max_length=50, unique=True, blank=True)
-    user = models.ForeignKey('userprofile.UserProfile', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     room = models.ForeignKey('rooms.Room', on_delete=models.CASCADE)
     checkin = models.DateTimeField()
     checkout = models.DateTimeField()
