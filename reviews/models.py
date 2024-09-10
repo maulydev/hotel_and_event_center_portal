@@ -1,8 +1,8 @@
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
-
+from django.contrib.auth.models import User
 class Review(models.Model):
-    user = models.ForeignKey('userprofile.UserProfile', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     hotel = models.ForeignKey('hotels.Hotel', on_delete=models.CASCADE)
     review = models.TextField()
     price_rating = models.IntegerField(default=0, validators=[MaxValueValidator(5), MinValueValidator(0)])
@@ -18,7 +18,7 @@ class Review(models.Model):
     
     
 class EventCenterReview(models.Model):
-    user = models.ForeignKey('userprofile.UserProfile', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     event_center = models.ForeignKey('event_centers.EventCenter', on_delete=models.CASCADE)
     review = models.TextField()
     price_rating = models.IntegerField(default=0, validators=[MaxValueValidator(5), MinValueValidator(0)])
