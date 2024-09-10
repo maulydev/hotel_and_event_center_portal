@@ -322,7 +322,8 @@ def verify_otp(request):
             'phone_number': user.profile.phone_number,
             'role': user.profile.role,
             'profile_picture': user.profile.profile_picture.url if user.profile.profile_picture else None,
-            'login_time': timezone.now()
+            'login_time': timezone.now(),
+            'profile_id': user.profile.id
         }
         return Response(response, status=status.HTTP_200_OK)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
