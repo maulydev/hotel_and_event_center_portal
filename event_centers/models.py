@@ -5,8 +5,6 @@ from lib.path_and_rename import EventCenterImageRename
 from lib.constants import COUNTRY_CHOICES, REGION_CHOICES
 from django.core.exceptions import ValidationError
 import uuid
-from django.contrib.auth.models import User
-
 
 
 event_center_image_rename = EventCenterImageRename("event_center_images/")
@@ -52,7 +50,7 @@ class EventCenter(models.Model):
 class EventBooking(models.Model):
     booking_number = models.CharField(max_length=50, unique=True, blank=True)
     event_center = models.ForeignKey(EventCenter, on_delete=models.CASCADE, related_name='event_bookings')
-    customer = models.ForeignKey(User, on_delete=models.CASCADE)
+    customer = models.ForeignKey('userprofile.UserProfile', on_delete=models.CASCADE)
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
     total_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
