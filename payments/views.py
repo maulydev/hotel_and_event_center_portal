@@ -14,7 +14,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
         payment = serializer.save()
         if payment.payment_status == 'confirmed':
             # Assuming the booking has a related user with a phone number
-            phone_number = payment.booking.user.phone_number
+            phone_number = payment.booking.user.profile.phone_number
             message = f"Your payment of {payment.amount} for booking {payment.booking.booking_number} was successful."
             send_sms(phone_number, message)
     
